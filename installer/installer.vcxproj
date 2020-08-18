@@ -31,7 +31,7 @@
     <ProjectGuid>{D19E6354-A643-4ACC-82D5-B2780BB83475}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>installer</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
     <ProjectName>installer</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -210,7 +210,7 @@
       <Output TaskParameter="Items" ItemName="InstallerLibraryHash" />
     </GetFileHash>
     <PropertyGroup>
-      <WixCandleFlags>$(WixCandleFlags) -dINSTALLER_LIBRARY_HASH=@(InstallerLibraryHash->Metadata('FileHash')) -dINSTALLER_LIBRARY_TIME=$([System.IO.File]::GetLastWriteTime('$(OutDir)$(TargetName)$(TargetExt)').Ticks)</WixCandleFlags>
+      <WixCandleFlags>$(WixCandleFlags) -dINSTALLER_LIBRARY_HASH=@(InstallerLibraryHash-&gt;Metadata('FileHash')) -dINSTALLER_LIBRARY_TIME=$([System.IO.File]::GetLastWriteTime('$(OutDir)$(TargetName)$(TargetExt)').Ticks)</WixCandleFlags>
     </PropertyGroup>
   </Target>
   <Target Name="WixCompile" DependsOnTargets="HashInstallerLibrary" Inputs="installer.wxs" Outputs="$(IntDir)installer.wixobj">

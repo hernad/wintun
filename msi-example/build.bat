@@ -15,8 +15,8 @@ if exist .deps\prepared goto :build
 	rmdir /s /q .deps 2> NUL
 	mkdir .deps || goto :error
 	cd .deps || goto :error
-	call :download wintun-x86.msm https://www.wintun.net/builds/wintun-x86-{{{VERSION}}}.msm {{{32BIT HASH}}} || goto :error
-	call :download wintun-amd64.msm https://www.wintun.net/builds/wintun-amd64-{{{VERSION}}}.msm {{{64BIT HASH}}} || goto :error
+	REM call :download wintun-x86.msm https://www.wintun.net/builds/wintun-x86-0.8.1.msm {{{32BIT HASH}}} || goto :error
+	call :download wintun-amd64.msm https://www.wintun.net/builds/wintun-amd64-0.8.1.msm af9644438a716f5a022052e3574ee0404c3e3309daff84889d656178fbc6b168 || goto :error
 	call :download wix-binaries.zip http://wixtoolset.org/downloads/v3.14.0.2812/wix314-binaries.zip 923892298f37514622c58cbbd9c2cadf2822d9bb53df8ee83aaeb05280777611 || goto :error
 	echo [+] Extracting wix-binaries.zip
 	mkdir wix\bin || goto :error
@@ -28,13 +28,13 @@ if exist .deps\prepared goto :build
 
 :build
 	set WIX=%BUILDDIR%.deps\wix\
-	call :msi x86 i686 x86 || goto :error
+	REM call :msi x86 i686 x86 || goto :error
 	call :msi amd64 x86_64 x64 || goto :error
 	if exist ..\sign.bat call ..\sign.bat
 	if "%SigningCertificate%"=="" goto :success
-	if "%TimestampServer%"=="" goto :success
+	REM if "%TimestampServer%"=="" goto :success
 	echo [+] Signing
-	signtool sign /sha1 "%SigningCertificate%" /fd sha256 /tr "%TimestampServer%" /td sha256 /d "ExampleTun Setup" "dist\exampletun-*.msi" || goto :error
+	signtool sign  /f "c:\dev\self_signed.pfx" /p test01 /fd sha256 /tr  http://timestamp.digicert.com /td sha256 /d "WindowsTun Setup" "dist\exampletun-*.msi" || goto :error
 
 :success
 	echo [+] Success.
